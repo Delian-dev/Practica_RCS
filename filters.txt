@@ -1,0 +1,31 @@
+not (src host 192.168.1.137 and dst host 192.168.1.1)
+not (src host 192.168.1.1 and dst host 192.168.1.137)
+not (src host 192.168.1.137 and dst host 100.100.1.1)
+not (src host 100.100.1.1 and dst host 192.168.1.137)
+not (src host 192.168.1.137 and dst host 100.100.0.1)
+not (src host 100.100.0.1 and dst host 192.168.1.137)
+not broadcast
+not multicast
+not icmp6
+not icmp
+not net 2.17.117.0/24
+not net 3.0.0.0/8
+not net 23.48.23.0/24
+not net 142.0.0.0/8
+not net 82.78.0.0/16
+not net 34.0.0.0/8
+not net 52.0.0.0/8
+not net 20.0.0.0/8
+not net 104.0.0.0/8
+not net 13.0.0.0/8
+not net 172.66.0.0/16
+not net 172.217.0.0/16
+not net 91.228.0.0/16
+not net 69.173.0.0/16
+not net 108.128.0.0/16
+not net 178.250.0.0/16
+not net 185.64.189.0/24
+not net 35.214.0.0/16
+not net 99.80.0.0/16
+not net 216.239.0.0/16
+not tcp port 80

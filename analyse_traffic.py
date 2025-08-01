@@ -6,6 +6,8 @@ import ipaddress
 from datetime import datetime
 import json
 
+import gui
+
 
 def readCapture(filepath):
     capture=PcapReader(filepath)
@@ -191,13 +193,22 @@ def startAnalysis(capture):
 
 
 
-capture=readCapture('../MesajAudio->Tata.pcap') #file to analyze (for now static)
+if __name__ == "__main__":
 
-noOfPackets=getCaptureSize(capture)
-output=[]
-#showPacketsData(capture)
-startAnalysis(capture)
+    filepath = gui.start_gui() #starts the main gui
+    if filepath:
+        capture = readCapture(filepath)
+        
+        noOfPackets=getCaptureSize(capture)
+        output=[]
+        #showPacketsData(capture)
+        startAnalysis(capture)
 
-#json file:
-with open('message_types.json', 'w') as f:
-    json.dump(output, f, indent=4)
+        #json file:
+        with open('message_types.json', 'w') as f:
+            json.dump(output, f, indent=4)
+        
+        print()
+        print("Analysis complete. Output written to message_types.json")
+    else:
+        print("No file selected")
