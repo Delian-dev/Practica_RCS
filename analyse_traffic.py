@@ -105,7 +105,7 @@ def checkTCPMessageType(capture, idx):
     #problem is txt/photos/documents all come in packages of size 1446 max
     #its also hard to find a pattern for when I should break from this method
     msgType='none'
-    bigPackCounter=0 #havent seen a single text message to take more than 5 packages of 1446 (not really a good criteria ig since small photos/docs can also have a small no of big packages)
+    bigPackCounter=1 #havent seen a single text message to take more than 5 packages of 1446 (not really a good criteria ig since small photos/docs can also have a small no of big packages)
                      #still dont know when to break
     while idx<noOfPackets:
         packet=capture[idx]
@@ -115,10 +115,15 @@ def checkTCPMessageType(capture, idx):
         if len(packet)==1446:
             bigPackCounter=bigPackCounter+1
         
+        if len(packet)<200 and '192.168' not in packet[IP].src and len(packet)!=66: #small package not coming from client (logic still has flaws since there can be small packages between the big ones)
+                                                                                    #this might trick the program there are more text messages
+            idx=idx+1
+            break
+
         idx=idx+1
 
 
-    #after leaving while by some criteria - maybe check when appears a new tcp stream
+    #after leaving while by some criteria
     if msgType=='none':
         if bigPackCounter>5:
             msgType='Media'
@@ -177,18 +182,18 @@ def startAnalysis(capture):
                         }
                     output.append(info)
         
-        '''for now this tcp logic doesnt really work and every capture is seen as text/media'''
-        #else:
-            # if packet.haslayer(TCP):
-            #     if packet[TCP].dport==443: #the message packets are mostly client->server
-            #         type,timestamp,idx = checkTCPMessageType(capture,idx)
-            #         if type != 'none':
-            #             print(f'Message type: {type} at {timestamp}' )
-            #             info={
-            #                 "timestamp": timestamp,
-            #                 "type": type
-            #             }
-            #             output.append(info)
+        #for now this tcp logic doesnt really work and every capture is seen as text/media
+        else:
+            if packet.haslayer(TCP):
+                if packet[TCP].dport==443 and len(packet)>600: #the message packets are mostly client->server
+                    type,timestamp,idx = checkTCPMessageType(capture,idx)
+                    if type != 'none':
+                        print(f'Message type: {type} at {timestamp}' )
+                        info={
+                            "timestamp": timestamp,
+                            "type": type
+                        }
+                        output.append(info)
         idx=idx+1
 
 
