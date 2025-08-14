@@ -9,6 +9,7 @@ def start_gui():
     file_path = {"selected": None}
     capture_proc = {"proc": None}
     is_running = {"value": True}
+    folder_mode = {"enabled": False} #for the option of choosing a whole folder
 
     def open_main_window():
         #rebuilds the main window
@@ -23,6 +24,16 @@ def start_gui():
             )
             if path:
                 file_path["selected"] = path
+                folder_mode["enabled"] = False
+                root.destroy()
+
+        def choose_folder():
+            path = filedialog.askdirectory(
+                title = "Choose a folder with capture files (.pcap)"
+            )
+            if path:
+                file_path["selected"] = path
+                folder_mode["enabled"] = True
                 root.destroy()
 
         def launch_capture_window(): #activates the window for live capture
@@ -31,6 +42,7 @@ def start_gui():
 
         tk.Label(root, text="Select capture method:", font=("Arial", 12)).pack(pady=10)
         tk.Button(root, text="📂 Choose Capture File", command=choose_file, width=30).pack(pady=5)
+        tk.Button(root, text="📁 Choose Folder of Captures", command=choose_folder, width=30).pack(pady=5)
         tk.Button(root, text="🟢 Run Live Capture Script", command=launch_capture_window, width=30).pack(pady=5)
 
         root.mainloop()
@@ -96,4 +108,4 @@ def start_gui():
         capture_window.mainloop()
 
     open_main_window()
-    return file_path["selected"] #returns the selected file or the file obtained from the live capture
+    return file_path["selected"], folder_mode["enabled"] #returns the selected file or the file obtained from the live capture

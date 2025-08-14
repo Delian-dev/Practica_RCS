@@ -1,10 +1,8 @@
-[
-    {
-        "timestamp": "2025-07-19 10:49:16",
-        "type": "Text"
-    },
-    {
-        "timestamp": "2025-07-19 10:49:46",
-        "type": "Text"
-    }
-]
+{
+    "capture.pcap": [
+        {
+            "timestamp": "2025-08-14 10:13:05",
+            "type": "Video Call"
+        }
+    ]
+}
